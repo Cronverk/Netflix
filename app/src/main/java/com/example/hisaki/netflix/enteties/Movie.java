@@ -7,12 +7,12 @@ package com.example.hisaki.netflix.enteties;
 public class Movie {
 
     private int unit;
-    private int showId;
-    private String showTitle;
-    private String releaseYear;
+    private int show_id;
+    private String show_title;
+    private String release_year;
     private String rating;
     private String category;
-    private String showCast;
+    private String show_cast;
     private String director;
     private String summary;
     private String poster;
@@ -39,55 +39,55 @@ public class Movie {
     /**
      *
      * @return
-     *     The showId
-     */
-    public int getShowId() {
-        return showId;
-    }
-
-    /**
-     *
-     * @param showId
      *     The show_id
      */
-    public void setShowId(int showId) {
-        this.showId = showId;
+    public int getshow_id() {
+        return show_id;
+    }
+
+    /**
+     *
+     * @param show_id
+     *     The show_id
+     */
+    public void setshow_id(int show_id) {
+        this.show_id = show_id;
     }
 
     /**
      *
      * @return
-     *     The showTitle
-     */
-    public String getShowTitle() {
-        return showTitle;
-    }
-
-    /**
-     *
-     * @param showTitle
      *     The show_title
      */
-    public void setShowTitle(String showTitle) {
-        this.showTitle = showTitle;
+    public String getShowTitle() {
+        return show_title;
+    }
+
+    /**
+     *
+     * @param show_title
+     *     The show_title
+     */
+    public void setShowTitle(String show_title) {
+        this.show_title = show_title;
     }
 
     /**
      *
      * @return
-     *     The releaseYear
+     *     The release_year
      */
     public String getReleaseYear() {
-        return releaseYear;
+        return release_year;
     }
 
     /**
      *
-     * @param releaseYear
+     * @param release_year
      *     The release_year
      */
-    public void setReleaseYear(String releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setReleaseYear(String release_year) {
+        this.release_year = release_year;
     }
 
     /**
@@ -129,19 +129,19 @@ public class Movie {
     /**
      *
      * @return
-     *     The showCast
+     *     The show_cast
      */
     public String getShowCast() {
-        return showCast;
+        return show_cast;
     }
 
     /**
      *
-     * @param showCast
+     * @param show_cast
      *     The show_cast
      */
-    public void setShowCast(String showCast) {
-        this.showCast = showCast;
+    public void setShowCast(String show_cast) {
+        this.show_cast = show_cast;
     }
 
     /**
