@@ -2,16 +2,15 @@ package com.example.hisaki.netflix.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 
 import com.example.hisaki.netflix.MyApp;
 import com.example.hisaki.netflix.R;
@@ -82,9 +81,21 @@ public class SearchMovie extends Fragment {
         public void afterTextChanged(Editable editable) {
             if( editable.toString().length() > 2 ){
                 if( type == 1 )
-                api.getMovieByTitle(editable.toString()).enqueue(movieCall);
+                    api.getMovieByTitle(editable.toString()).enqueue(movieCall);
                 else api.getMovieByDirector(editable.toString()).enqueue(moviesCall);
             }
+        }
+    };
+
+    AdapterView.OnItemClickListener movieClick = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            MovieContent  movie_fragment  = new MovieContent();
+            movie_fragment.setMovie(movies.get(position));
+            transaction.replace(R.id.content,movie_fragment);
+            transaction.addToBackStack("movie");
+            transaction.commit();
         }
     };
 
@@ -99,6 +110,7 @@ public class SearchMovie extends Fragment {
         GridView list = (GridView) layout.findViewById(R.id.list);
         EditText edit = (EditText)layout.findViewById(R.id.option);
         edit.addTextChangedListener(editCall);
+        list.setOnItemClickListener(movieClick);
 
         if(type == 1) edit.setHint("Enter movie name");
         else edit.setHint("Enter director name");
@@ -108,10 +120,13 @@ public class SearchMovie extends Fragment {
         list.setAdapter(adapter);
         return layout;
     }
+    public void updateAdapter(List<Movie> update_movies){
+        movies.removeAll(movies);
+        movies.addAll(update_movies);
 
-
-    public void updateAdapter(List<Movie> movies){
-        this.movies  = movies;
         adapter.notifyDataSetChanged();
+    }
+    public void setType(int type) {
+        this.type = type;
     }
 }

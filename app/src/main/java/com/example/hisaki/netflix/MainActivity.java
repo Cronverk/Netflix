@@ -1,10 +1,7 @@
 package com.example.hisaki.netflix;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,20 +10,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.example.hisaki.netflix.enteties.Movie;
 import com.example.hisaki.netflix.fragments.MovieContent;
 import com.example.hisaki.netflix.fragments.SavedMovies;
 import com.example.hisaki.netflix.fragments.SearchMovie;
-import com.example.hisaki.netflix.retrofit.NetflixApi;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     SavedMovies saved_fragment;
     SearchMovie search_title_fragment;
@@ -34,12 +27,36 @@ public class MainActivity extends AppCompatActivity
     MovieContent movie_fragment;
 
 
+    FragmentManager.OnBackStackChangedListener stackListener =
+            new FragmentManager.OnBackStackChangedListener() {
+        @Override
+        public void onBackStackChanged() {
+            shouldDisplayHomeUp();
+        }
+    };
+
+    public void shouldDisplayHomeUp(){
+        //Enable Up button only  if there are entries in the back stack
+        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        //This method is called when the up button is pressed. Just the pop back stack.
+        getSupportFragmentManager().popBackStack();
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //mDrawerToggle.setDrawerIndicatorEnabled(false);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -55,8 +72,11 @@ public class MainActivity extends AppCompatActivity
             saved_fragment.setAdapter();
 
             search_director_fragment = new SearchMovie();
+            search_director_fragment.setType(2);
+            //search_director_fragment.setMovieViewer(this);
 
             search_title_fragment = new SearchMovie();
+            search_title_fragment.setType(1);
             movie_fragment = new MovieContent();
         }
         choseFragment(R.id.saved_movies);
@@ -74,22 +94,19 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id == android.R.id.home)
+            onBackPressed();
 
         return super.onOptionsItemSelected(item);
     }
@@ -110,13 +127,13 @@ public class MainActivity extends AppCompatActivity
         android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
         switch(id){
             case R.id.saved_movies:
-                transaction.add(R.id.content,saved_fragment);
+                transaction.replace(R.id.content,saved_fragment);
                 break;
             case R.id.search_movie_title:
-                transaction.add(R.id.content,search_title_fragment);
+                transaction.replace(R.id.content,search_title_fragment);
                 break;
             case R.id.search_movie_director:
-                transaction.add(R.id.content,search_director_fragment);
+                transaction.replace(R.id.content,search_director_fragment);
                 break;
         }
         transaction.commit();
