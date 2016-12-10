@@ -21,5 +21,5 @@ public interface NetflixApi {
     Call<Movie> getMovieByTitle(@Query("title") String title);
 
     @POST("api.php")
-    Call<List<Movie>> getMovieByDirector(@Path("director") String director);
+    Call<List<Movie>> getMovieByDirector(@Query("director") String director);
 }
