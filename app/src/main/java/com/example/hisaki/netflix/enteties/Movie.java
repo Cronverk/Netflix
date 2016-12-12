@@ -1,12 +1,16 @@
 package com.example.hisaki.netflix.enteties;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by hisaki on 26.10.2016.
  */
-
+@Entity
 public class Movie {
-
-    private int unit;
+    @Id
+    private long unit;
     private int show_id;
     private String show_title;
     private String release_year;
@@ -18,12 +22,35 @@ public class Movie {
     private String poster;
     private int mediatype;
 
+
+    @Generated(hash = 1604036300)
+    public Movie(long unit, int show_id, String show_title, String release_year,
+            String rating, String category, String show_cast, String director,
+            String summary, String poster, int mediatype) {
+        this.unit = unit;
+        this.show_id = show_id;
+        this.show_title = show_title;
+        this.release_year = release_year;
+        this.rating = rating;
+        this.category = category;
+        this.show_cast = show_cast;
+        this.director = director;
+        this.summary = summary;
+        this.poster = poster;
+        this.mediatype = mediatype;
+    }
+
+    @Generated(hash = 1263461133)
+    public Movie() {
+    }
+
+
     /**
      *
      * @return
      *     The unit
      */
-    public int getUnit() {
+    public long getUnit() {
         return unit;
     }
 
@@ -32,7 +59,7 @@ public class Movie {
      * @param unit
      *     The unit
      */
-    public void setUnit(int unit) {
+    public void setUnit(long unit) {
         this.unit = unit;
     }
 
@@ -214,6 +241,38 @@ public class Movie {
      */
     public void setMediatype(int mediatype) {
         this.mediatype = mediatype;
+    }
+
+    public int getShow_id() {
+        return this.show_id;
+    }
+
+    public void setShow_id(int show_id) {
+        this.show_id = show_id;
+    }
+
+    public String getShow_title() {
+        return this.show_title;
+    }
+
+    public void setShow_title(String show_title) {
+        this.show_title = show_title;
+    }
+
+    public String getRelease_year() {
+        return this.release_year;
+    }
+
+    public void setRelease_year(String release_year) {
+        this.release_year = release_year;
+    }
+
+    public String getShow_cast() {
+        return this.show_cast;
+    }
+
+    public void setShow_cast(String show_cast) {
+        this.show_cast = show_cast;
     }
 
 }

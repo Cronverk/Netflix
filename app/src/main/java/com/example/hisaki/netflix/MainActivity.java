@@ -18,6 +18,9 @@ import com.example.hisaki.netflix.fragments.MovieContent;
 import com.example.hisaki.netflix.fragments.SavedMovies;
 import com.example.hisaki.netflix.fragments.SearchMovie;
 
+
+import org.greenrobot.greendao.database.Database;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -64,22 +67,20 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if(savedInstanceState == null) {
             saved_fragment = new SavedMovies();
-            saved_fragment.setAdapter();
 
             search_director_fragment = new SearchMovie();
             search_director_fragment.setType(2);
-            //search_director_fragment.setMovieViewer(this);
 
             search_title_fragment = new SearchMovie();
             search_title_fragment.setType(1);
             movie_fragment = new MovieContent();
         }
         choseFragment(R.id.saved_movies);
+
     }
 
     @Override
@@ -102,9 +103,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if(id == android.R.id.home)
             onBackPressed();
 
