@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hisaki.netflix.R;
 import com.example.hisaki.netflix.enteties.Movie;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by hisaki on 25.10.2016.
@@ -26,6 +28,11 @@ public class MovieContent extends Fragment {
         ((TextView) layout.findViewById(R.id.release)).setText(movie.getReleaseYear());
         ((TextView) layout.findViewById(R.id.rating)).setText(movie.getRating());
 
+        ImageView image = (ImageView) layout.findViewById(R.id.movie_poster);
+
+        Picasso.with(getActivity().getApplicationContext())
+                .load(movie.getPoster())
+                .into(image);
         return layout;
     }
 

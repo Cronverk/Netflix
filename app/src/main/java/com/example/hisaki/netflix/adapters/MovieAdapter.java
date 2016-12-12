@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.hisaki.netflix.R;
 import com.example.hisaki.netflix.enteties.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +24,12 @@ import java.util.List;
 public class MovieAdapter extends ArrayAdapter {
     List<Movie> movies;
     int listType;
+    Context context;
 
     public MovieAdapter(Context context, int resource, List<Movie> movies) {
         super(context, resource);
         this.movies     = movies;
+        this.context    = context;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class MovieAdapter extends ArrayAdapter {
             holder  = new MovieHolder(
                     convertView.findViewById(R.id.category),
                     convertView.findViewById(R.id.director),
-                    convertView.findViewById(R.id.imageView),
+                    convertView.findViewById(R.id.poster),
                     convertView.findViewById(R.id.rating),
                     convertView.findViewById(R.id.release),
                     convertView.findViewById(R.id.titletle));
@@ -60,10 +63,13 @@ public class MovieAdapter extends ArrayAdapter {
 
         holder.category.setText(movie.getCategory());
         holder.director.setText(movie.getDirector());
-        //holder.image.setImageBitmap(movie.getImage());
         holder.rating.setText(movie.getRating());
         holder.release.setText(movie.getReleaseYear());
         holder.title.setText(movie.getShowTitle());
+
+        Picasso.with(context)
+                .load(movie.getPoster())
+                .into(holder.image);
 
         return convertView;
     }

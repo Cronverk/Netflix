@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:id="@+id/poster"
+        android:id="@+id/movie_poster"
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8sp"
-        android:layout_below="@+id/poster" />
+        android:layout_below="@+id/movie_poster" />
 
     <TextView
         android:id="@+id/titletle"
