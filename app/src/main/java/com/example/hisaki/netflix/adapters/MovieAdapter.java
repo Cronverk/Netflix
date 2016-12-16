@@ -19,7 +19,6 @@ import java.util.List;
 
 public class MovieAdapter extends ArrayAdapter {
     List<Movie> movies;
-    int listType;
     Context context;
 
     public MovieAdapter(Context context, int resource, List<Movie> movies) {

@@ -31,9 +31,11 @@ public class MovieClickListener implements AdapterView.OnItemClickListener {
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
         MovieContent movie_fragment  = new MovieContent();
-        movie_fragment.setHasOptionsMenu(menu_enable);
         movie_fragment.setMovie(movies.get(position));
+        movie_fragment.setMenuEnable(menu_enable);
+        movie_fragment.setHasOptionsMenu(true);
         transaction.replace(R.id.content,movie_fragment);
+
         transaction.addToBackStack("movie");
         transaction.commit();
     }

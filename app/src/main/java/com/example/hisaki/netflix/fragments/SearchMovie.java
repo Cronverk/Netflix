@@ -99,11 +99,14 @@ public class SearchMovie extends Fragment {
         View layout = inflater.inflate(R.layout.movies_list_fragment,container,false);
         GridView list = (GridView) layout.findViewById(R.id.list);
         EditText edit = (EditText)layout.findViewById(R.id.option);
-        edit.addTextChangedListener(editCall);
-        list.setOnItemClickListener(movieClick);
+
 
         if(type == 1) edit.setHint("Enter movie name");
         else edit.setHint("Enter director name");
+
+        edit.addTextChangedListener(editCall);
+        list.setOnItemClickListener(movieClick);
+
         movies = new ArrayList<>();
         adapter = new MovieAdapter(getActivity(),R.layout.movie_item_fragment,movies);
 

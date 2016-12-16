@@ -1,5 +1,8 @@
 package com.example.hisaki.netflix.enteties;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
@@ -8,7 +11,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * Created by hisaki on 26.10.2016.
  */
 @Entity
-public class Movie {
+public class Movie implements Parcelable {
     @Id
     private long unit;
     private int show_id;
@@ -275,4 +278,20 @@ public class Movie {
         this.show_cast = show_cast;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(unit);
+        parcel.writeString(show_title);
+        parcel.writeString(poster);
+    }
+    private Movie(Parcel parcel) {
+        show_title  = parcel.readString();
+        poster      = parcel.readString();
+        unit        = parcel.readLong();
+    }
 }

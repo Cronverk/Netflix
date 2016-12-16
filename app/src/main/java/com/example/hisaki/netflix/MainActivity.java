@@ -1,7 +1,8 @@
 package com.example.hisaki.netflix;
 
-import android.app.FragmentManager;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,39 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
-import com.example.hisaki.netflix.enteties.Movie;
-import com.example.hisaki.netflix.fragments.MovieContent;
 import com.example.hisaki.netflix.fragments.SavedMovies;
 import com.example.hisaki.netflix.fragments.SearchMovie;
 
-
-import org.greenrobot.greendao.database.Database;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
-
-    SavedMovies saved_fragment;
-    SearchMovie search_title_fragment;
-    SearchMovie search_director_fragment;
-    MovieContent movie_fragment;
-
-
-    FragmentManager.OnBackStackChangedListener stackListener =
-            new FragmentManager.OnBackStackChangedListener() {
-        @Override
-        public void onBackStackChanged() {
-            shouldDisplayHomeUp();
-        }
-    };
-
-    public void shouldDisplayHomeUp(){
-        //Enable Up button only  if there are entries in the back stack
-        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
-    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -59,8 +33,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //mDrawerToggle.setDrawerIndicatorEnabled(false);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -69,17 +41,14 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        if(savedInstanceState == null) {
-            saved_fragment = new SavedMovies();
 
-            search_director_fragment = new SearchMovie();
-            search_director_fragment.setType(2);
 
-            search_title_fragment = new SearchMovie();
-            search_title_fragment.setType(1);
-            movie_fragment = new MovieContent();
+        if (savedInstanceState == null){
+            Fragment fragment = new SavedMovies();
+            choseFragment(fragment);
         }
-        choseFragment(R.id.saved_movies);
+
+
 
     }
 
@@ -90,6 +59,8 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            if(getFragmentManager().getBackStackEntryCount() == 0)
+                finish();
         }
     }
 
@@ -114,26 +85,43 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        choseFragment(id);
-
+        switch (id) {
+            case R.id.search_movie_title:
+                SearchMovie searchMovie1 = new SearchMovie();
+                searchMovie1.setType(1);
+                choseFragment(searchMovie1);
+                break;
+            case R.id.search_movie_director:
+                SearchMovie searchMovie = new SearchMovie();
+                searchMovie.setType(2);
+                choseFragment(searchMovie);
+                break;
+            case R.id.saved_movies:
+                choseFragment(new SavedMovies());
+                break;
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void choseFragment(int id){
+    private void choseFragment(Fragment fragment){
+        getFragmentManager().popBackStack();
         android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        switch(id){
-            case R.id.saved_movies:
-                transaction.replace(R.id.content,saved_fragment);
-                break;
-            case R.id.search_movie_title:
-                transaction.replace(R.id.content,search_title_fragment);
-                break;
-            case R.id.search_movie_director:
-                transaction.replace(R.id.content,search_director_fragment);
-                break;
-        }
+        transaction.replace(R.id.content,fragment);
+        transaction.addToBackStack("last");
         transaction.commit();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
     }
 }
