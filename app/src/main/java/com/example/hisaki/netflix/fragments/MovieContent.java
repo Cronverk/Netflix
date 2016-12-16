@@ -81,19 +81,10 @@ public class MovieContent extends Fragment {
 
     public void saveMovie(){
         session.insertOrReplace(movie);
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-        ft.commit();
+        getActivity().onBackPressed();
     }
     public void closeMovie(){
         getActivity().onBackPressed();
-        /*FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(this);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-        ft.commit();*/
     }
     public void setMovie(Movie movie){
         this.movie = movie;

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.hisaki.netflix.MyApp;
 import com.example.hisaki.netflix.R;
@@ -36,14 +38,22 @@ public class SearchMovie extends Fragment {
 
     NetflixApi  api;
 
+    TextView errorText;
+
     Callback<Movie> movieCall = new Callback<Movie>() {
         @Override
         public void onResponse(Call<Movie> call, Response<Movie> response) {
             if(response.code() == 200){
+
                 Movie movie = response.body();
                 List<Movie> movies = new ArrayList<>();
                 movies.add(movie);
                 updateAdapter(movies);
+                setErrorMessage("", View.GONE);
+            }
+            else {
+                setErrorMessage("Sorry! We couldn't find a movie with title…", View.VISIBLE);
+                updateAdapter(new ArrayList<Movie>());
             }
         }
 
@@ -52,12 +62,29 @@ public class SearchMovie extends Fragment {
 
         }
     };
+
+    private void setErrorMessage(String message, int visible){
+        errorText.setText(message);
+        errorText.setVisibility(visible);
+        if(View.VISIBLE == visible)
+            errorText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        else
+            errorText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    1));
+
+    }
     Callback<List<Movie>> moviesCall = new Callback<List<Movie>>() {
         @Override
         public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
             if(response.code() == 200){
                 List<Movie> movies = response.body();
                 updateAdapter(movies);
+                setErrorMessage("", View.GONE);
+            }
+            else{
+                setErrorMessage("Sorry! We couldn't find a movie by director…",View.VISIBLE);
+                updateAdapter(new ArrayList<Movie>());
             }
         }
 
@@ -84,6 +111,9 @@ public class SearchMovie extends Fragment {
                     api.getMovieByTitle(editable.toString()).enqueue(movieCall);
                 else api.getMovieByDirector(editable.toString()).enqueue(moviesCall);
             }
+            if(editable.toString().length() == 0){
+                setErrorMessage("",View.GONE);
+            }
         }
     };
 
@@ -99,6 +129,7 @@ public class SearchMovie extends Fragment {
         View layout = inflater.inflate(R.layout.movies_list_fragment,container,false);
         GridView list = (GridView) layout.findViewById(R.id.list);
         EditText edit = (EditText)layout.findViewById(R.id.option);
+        errorText = (TextView) layout.findViewById(R.id.error);
 
 
         if(type == 1) edit.setHint("Enter movie name");

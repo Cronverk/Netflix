@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.hisaki.netflix.MyApp;
 import com.example.hisaki.netflix.R;
@@ -30,6 +31,9 @@ public class SavedMovies extends Fragment {
     DaoSession session;
 
     MovieClickListener movieClick;
+
+    TextView errorText;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class SavedMovies extends Fragment {
 
         movieClick = new MovieClickListener(getFragmentManager(), movies, false);
         View layout = inflater.inflate(R.layout.movies_list_fragment, container, false);
+        errorText = (TextView) layout.findViewById(R.id.error);
 
         GridView list = (GridView) layout.findViewById(R.id.list);
         View edit = layout.findViewById(R.id.option);
@@ -52,11 +57,24 @@ public class SavedMovies extends Fragment {
         list.setOnItemClickListener(movieClick);
         list.setAdapter(adapter);
 
+        if( movies.size() > 0 )
+            setErrorMessage("",View.GONE);
+        else setErrorMessage("You have not saved a single film",View.VISIBLE);
 
         return layout;
     }
 
+    private void setErrorMessage(String message, int visible){
+        errorText.setText(message);
+        errorText.setVisibility(visible);
+        if(View.VISIBLE == visible)
+            errorText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+        else
+            errorText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    1));
 
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
